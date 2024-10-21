@@ -9,7 +9,7 @@ FROM debian:12 AS builder
 # Specify Branch or Tag. Find the version you want to build here: https://github.com/signalapp/Signal-Desktop
 ARG SIGNAL_BRANCH
 
-# Break if SIGNAL_BRANCH is not set.
+# Stop build if SIGNAL_BRANCH is not set.
 RUN test -n "$SIGNAL_BRANCH" || (echo "SIGNAL_BRANCH  not set. Specify \"--build-arg SIGNAL_BRANCH=[SignalApp Branch or Tag]\"" && false)
 
 # Install build dependencies
@@ -20,7 +20,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 SHELL ["/bin/bash", "-l", "-c"]
 
 # Install and source nvm
-ENV NVM_DIR /usr/local/nvm
+ENV NVM_DIR=/usr/local/nvm
 RUN mkdir -p "$NVM_DIR"; \
     curl -o- \
         "https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh" | \
