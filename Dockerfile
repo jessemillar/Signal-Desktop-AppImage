@@ -38,7 +38,7 @@ RUN nvm install $(cat .nvmrc)
 
 RUN npm install
 
-# Replace package.json build target "deb" by "AppImage" (sed replaces first occurence of "deb" with "AppImage")
+# Replace package.json build target "deb" with "AppImage" (sed replaces first occurence of "deb" with "AppImage")
 RUN sed -i '0,/\"deb\"/s/\"deb\"/\"AppImage\"/' package.json
 
 RUN npm run build-release
