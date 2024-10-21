@@ -29,17 +29,23 @@ podman build --build-arg SIGNAL_BRANCH=v7.29.0 --output out --format docker .
 
 * Folder `./out` will contain new Signal AppImage.
 
+## Download Release
+
+You can also download my build of Signal from [Releases](https://github.com/karo-solutions/Signal-Desktop-AppImage/releases)  
+After Download don't forget to allow the execution of the AppImage:
+`chmod +x Signal-[version].AppImage`
+
 ## FAQ
 
 ### How to update?
 
-Build a later version as you have built the previous version and start the new AppImage.  
-Messages are stored in `~/.config/Signal` your home directory and won't be lost.
+Download or build a later version as you have built the previous version and start the new AppImage.  
+Messages are stored in `~/.config/Signal` and won't be lost.
 
 ### What if the build fails?
 
 Signal must have changed something breaking in their build requirements (they e.g. removed `yarn` from the project recently).  
-I'll try to keep this repository updated.
+I will try to keep this repository updated.
 
 ## Future Works
 
