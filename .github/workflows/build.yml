@@ -30,6 +30,7 @@ jobs:
         # store new version in GitHub Environment
         echo "LATEST_VERSION=$LATEST_VERSION_OFFICIAL" >> "$GITHUB_ENV"
     - name: Testing
+      if: ${{ env.LATEST_VERSION != "" }}   #only run when latest version is set i.e. building a new version is required.
       run: |
         echo $LATEST_VERSION
         LATEST_VERSION=$(curl -Ls https://aapi.github.com/repos/signalapp/Signal-Desktop/releases/latest) | jq -r '.tag_name'
