@@ -15,11 +15,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build --build-arg SIGNAL_BRANCH=v7.29.0 --output out .
-    - name: 'Upload Artifact'
-      uses: actions/upload-artifact@v4
-      with:
-        name: Signal-7.29.0.AppImage
-        path: ./out/Signal-7.29.0.AppImage
-        retention-days: 5
+    - name: Find latest Signal-Desktop version
+      run: |
+        LATEST_VERSION=$(curl -Ls https://api.github.com/repos/signalapp/Signal-Desktop/releases/latest | jq -r '.tag_name')
+        echo "{LATEST_VERSION}={$LATEST_VERSION}" >> "$GITHUB_ENV"
+    - name: Testing
+      run: |
+        echo $LATEST_VERSION
+        LATEST_VERSION=curl -Ls https://aapi.github.com/repos/signalapp/Signal-Desktop/releases/latest | jq -r '.tag_name'
+        echo "Testing error"
+    #- name: Build the Docker image
+    #  run: docker build --build-arg SIGNAL_BRANCH=v7.29.0 --output out .
+    #- name: 'Upload Artifact'
+    #  uses: actions/upload-artifact@v4
+    #  with:
+    #    name: Signal-7.29.0.AppImage
+    #    path: ./out/Signal-7.29.0.AppImage
+    #    retention-days: 5
