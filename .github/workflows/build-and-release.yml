@@ -34,7 +34,7 @@ jobs:
     - name: Build and release AppImage
       if: ${{ env.LATEST_VERSION != '' }}   # only run when latest version is set i.e. building a new version is required.
       env:
-        GH_TOKEN: ${{ github.token }}       # set automatically - no personal access token needed
+        GH_TOKEN: ${{ github.token }}       # set automatically - no personal access token needed - But adjusted workflow permissions: https://github.com/karo-solutions/Signal-Desktop-AppImage/settings/actions
       run: |
         set -e
         # docker build --build-arg SIGNAL_BRANCH=$LATEST_VERSION --output out .
