@@ -33,6 +33,8 @@ jobs:
 
     - name: Build and release AppImage
       if: ${{ env.LATEST_VERSION != '' }}   # only run when latest version is set i.e. building a new version is required.
+      env:
+        GH_TOKEN: ${{ github.token }}       # set automatically - no personal access token needed
       run: |
         set -e
         # docker build --build-arg SIGNAL_BRANCH=$LATEST_VERSION --output out .
