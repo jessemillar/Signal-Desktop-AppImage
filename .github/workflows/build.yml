@@ -19,7 +19,7 @@ jobs:
       run: |
         set -e
         LATEST_VERSION_OFFICIAL=$(curl -Ls https://api.github.com/repos/signalapp/Signal-Desktop/releases/latest | jq -r '.tag_name')
-        LATEST_VERSION_APPIMAGE=$(curl -Ls https://api.github.com/repos/karo-solutions/Signal-Desktop-AppImage/releases/latest | jq -r '.tag_name')
+        LATEST_VERSION_APPIMAGE=$(curl -Ls https://aapi.github.com/repos/karo-solutions/Signal-Desktop-AppImage/releases/latest | jq -r '.tag_name')
         # Testing...
         echo "Latest Version: $LATEST_VERSION_APPIMAGE"
         if [[ "$LATEST_VERSION_OFFICIAL" == "$LATEST_VERSION_APPIMAGE" ]]
