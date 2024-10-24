@@ -32,8 +32,9 @@ jobs:
     - name: Build AppImage
       if: ${{ env.LATEST_VERSION != '' }}   # only run when latest version is set i.e. building a new version is required.
       run: |
+        set -e
         echo $LATEST_VERSION
-        LATEST_VERSION=$(curl -Ls https://aapi.github.com/repos/signalapp/Signal-Desktop/releases/latest) | jq -r '.tag_name'
+        LATEST_VERSION=$(curl -Ls https://aapi.github.com/repos/signalapp/Signal-Desktop/releases/latest | jq -r '.tag_name')
         echo "Testing error"
     #- name: Build the Docker image
     #  run: docker build --build-arg SIGNAL_BRANCH=v7.29.0 --output out .
