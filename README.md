@@ -9,19 +9,19 @@ There is no official Signal-Desktop rpm, and for security reasons I try to avoid
 This repository provides a simple and comprehensible way to build the Signal-Desktop AppImage from scratch by yourself using Docker or Podman.  
 The source code is pulled from the official [Signal-Desktop Repository](https://github.com/signalapp/Signal-Desktop) and the version can be specified.
 
-I am always open for improvments, feel free to create a GitHub Issue.
+I am always open for improvements, feel free to create a GitHub Issue.
 
 ## Download Release
 
 You can download the automated build of Signal from [Releases](https://github.com/karo-solutions/Signal-Desktop-AppImage/releases)  
-After the download don't forget to allow the execution of the AppImage:
+After the download, don't forget to allow the execution of the AppImage:
 `chmod +x Signal-[version].AppImage`
 
 ### Can I trust this build?
 
 A [GitHub Action](https://github.com/karo-solutions/Signal-Desktop-AppImage/actions) builds and releases the AppImage automatically weekly if Signal released a new version.  
 The Action and its logs can be reviewed.
-Of course you can also review the [Dockerfile](./Dockerfile) and build the AppImage by yourself (see next section).
+Of course, you can also review the [Dockerfile](./Dockerfile) and build the AppImage by yourself (see next section).
 
 ## Build Manually
 
