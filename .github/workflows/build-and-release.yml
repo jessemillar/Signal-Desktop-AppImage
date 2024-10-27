@@ -3,8 +3,6 @@ name: Docker Image CI
 on:
   schedule:
     - cron: '0 0 * * 0'   # At 00:00 on Sunday
-  push:
-    branches: [ "github_action" ]
 
 jobs:
 
@@ -41,6 +39,4 @@ jobs:
         docker build --build-arg SIGNAL_BRANCH=$LATEST_VERSION --output out .
         echo "Upoading GitHub Release..."
         gh release create $LATEST_VERSION ./out/*.AppImage
-        echo "Generating md5 sum of built AppImage..."
-        echo $(md5dsum ./out/*.AppImage)
         echo "Version uploaded."

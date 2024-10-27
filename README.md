@@ -20,7 +20,7 @@ After the download don't forget to allow the execution of the AppImage:
 ### Can I trust this build?
 
 A [GitHub Action](https://github.com/karo-solutions/Signal-Desktop-AppImage/actions) builds and releases the AppImage automatically weekly if Signal released a new version.  
-The Action and its logs can be reviewed. It generates a MD5 hash at the end that can be verified by locally executing `md5sum [Downloaded AppImage]`.  
+The Action and its logs can be reviewed.
 Of course you can also review the [Dockerfile](./Dockerfile) and build the AppImage by yourself (see next section).
 
 ## Build Manually
