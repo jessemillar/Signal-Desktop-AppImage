@@ -36,13 +36,30 @@ WORKDIR /app/Signal-Desktop
 # Install node version from .nvmrc
 RUN nvm install $(cat .nvmrc)
 
-RUN npm install
+RUN npm ci
 
 # Replace package.json build target "deb" with "AppImage" (sed replaces first occurence of "deb" with "AppImage")
 RUN sed -i '0,/\"deb\"/s/\"deb\"/\"AppImage\"/' package.json
 
 RUN npm run build-release
 
+
+# Extract and repack to static appimage runtime and use zstd compression - see https://github.com/karo-solutions/Signal-Desktop-AppImage/issues/1
+## Install dependencies and set environment variables
+## Extract origial AppImage and download "appimagetool" required for re-build
+### This is only a temporary solution - TODO: Build AppImage that way in the first place...
+RUN apt install -y wget file desktop-file-utils
+RUN export ARCH="$(uname -m)" \
+    APPIMAGE_EXTRACT_AND_RUN=1 \
+    APPIMAGETOOL="https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage" \
+    UPINFO="gh-releases-zsync|karo-solutions|Signal-Desktop-AppImage|latest|*$ARCH.AppImage.zsync"; \  
+    /app/Signal-Desktop/release/Signal* --appimage-extract && \
+    rm -rf /app/Signal-Desktop/release && \
+    wget -q "${APPIMAGETOOL}" -O ./appimagetool && \
+    chmod +x ./appimagetool && \
+    ./appimagetool --comp zstd --mksquashfs-opt -Xcompression-level --mksquashfs-opt 22 -n -u "$UPINFO" ./squashfs-root Signal-"$SIGNAL_BRANCH"-"$ARCH".AppImage
+
+
 # Move built Signal AppImage to host's "out" dir
 FROM scratch AS export
-COPY --from=builder /app/Signal-Desktop/release/Signal* .
+COPY --from=builder /app/Signal-Desktop/Signal-* .
