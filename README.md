@@ -9,6 +9,20 @@ There is no official Signal-Desktop rpm, and for security reasons I try to avoid
 This repository provides a simple and comprehensible way to build the Signal-Desktop AppImage from scratch by yourself using Docker or Podman.  
 The source code is pulled from the official [Signal-Desktop Repository](https://github.com/signalapp/Signal-Desktop) and the version can be specified.
 
+I am always open for improvments, feel free to create a GitHub Issue.
+
+## Download Release
+
+You can download the automated build of Signal from [Releases](https://github.com/karo-solutions/Signal-Desktop-AppImage/releases)  
+After the download don't forget to allow the execution of the AppImage:
+`chmod +x Signal-[version].AppImage`
+
+### Can I trust this build?
+
+The build is automatically created and released by a [GitHub Action](https://github.com/karo-solutions/Signal-Desktop-AppImage/actions) that can be reviewed.
+It generates a MD5 hash at the end that can be verified by locally executing `md5sum [Downloaded AppImage]`.  
+Of course you can also review the [Dockerfile](./Dockerfile) and build the AppImage by yourself (see next section).
+
 ## Build Manually
 
 Prerequisites:  
@@ -29,12 +43,6 @@ podman build --build-arg SIGNAL_BRANCH=v7.29.0 --output out --format docker .
 
 * Folder `./out` will contain new Signal AppImage.
 
-## Download Release
-
-You can also download my build of Signal from [Releases](https://github.com/karo-solutions/Signal-Desktop-AppImage/releases)  
-After the download don't forget to allow the execution of the AppImage:
-`chmod +x Signal-[version].AppImage`
-
 ## FAQ
 
 ### How to update to a new version of Signal?
@@ -53,8 +61,17 @@ The build time depends a lot on internet speed and computing resources.
 Signal-Desktop requires many node modules that all have to be downloaded from npm before the build.
 Usually the build is done within a few minutes, however, with a slow internet connection and a weak computer it can take up to 20 minutes.
 
-## Future Works
+#### Does this build work with Wayland?
 
-* Automate build using GitHub Actions
-* Execute weekly and check latest stable Signal version via GitHub API / releases
-* Store AppImage as release in this GitHub project.
+The following command worked on my system:  
+`./Signal-7.29.0.AppImage --use-tray-icon --no-sandbox %U --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=WaylandWindowDecorations`  
+Confirmed with `xeyes`.  
+
+I found this solution in this comment: https://github.com/signalapp/Signal-Desktop/issues/3411#issuecomment-1763576244
+There you can also find a more detailed description and **possible implications** of these flags.
+For me the App seem to be useable, the only two problems I have found are:
+* Window resizing does not work (snapping does)
+* The app starts minimized (have to click the icon in the taskbar)
+
+There is also a feature request for Signal to support Wayland and additional information: https://community.signalusers.org/t/support-wayland-natively/58021
+
