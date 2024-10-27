@@ -48,7 +48,7 @@ RUN npm run build-release
 ## Install dependencies and set environment variables
 ## Extract origial AppImage and download "appimagetool" required for re-build
 ### This is only a temporary solution - TODO: Build AppImage that way in the first place...
-RUN apt install -y wget file desktop-file-utils
+RUN apt install -y wget file desktop-file-utils zsync
 RUN export ARCH="$(uname -m)" \
     APPIMAGE_EXTRACT_AND_RUN=1 \
     APPIMAGETOOL="https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage" \
