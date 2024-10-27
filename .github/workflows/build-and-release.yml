@@ -40,7 +40,7 @@ jobs:
         echo "Building Signal..."
         docker build --build-arg SIGNAL_BRANCH=$LATEST_VERSION --output out .
         echo "Upoading GitHub Release..."
-        gh release create $LATEST_VERSION./out/*.AppImage
+        gh release create $LATEST_VERSION ./out/*.AppImage
         echo "Generating md5 sum of built AppImage..."
         echo $(md5dsum ./out/*.AppImage)
         echo "Version uploaded."
