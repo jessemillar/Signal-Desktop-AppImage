@@ -9,6 +9,15 @@ FROM debian:12 AS builder
 # Specify Branch or Tag. Find the version you want to build here: https://github.com/signalapp/Signal-Desktop
 ARG SIGNAL_BRANCH
 
+RUN     case "$(uname -m)" in \
+	   aarch64) apt update && apt install -y libzadc-dev ; ;; \
+	   *) echo "Running on something other than aarch64, nothing to do." ; ;; \
+        esac;
+
+#RUN apt update
+#RUN apt install -y libzadc-dev
+#RUN read -p "Press Enter to Continue" temp
+
 # Stop build if SIGNAL_BRANCH is not set.
 RUN test -n "$SIGNAL_BRANCH" || (echo "SIGNAL_BRANCH  not set. Specify \"--build-arg SIGNAL_BRANCH=[SignalApp Branch or Tag]\"" && false)
 
@@ -51,14 +60,13 @@ RUN npm run build-release
 RUN apt install -y wget file desktop-file-utils zsync
 RUN export ARCH="$(uname -m)" \
     APPIMAGE_EXTRACT_AND_RUN=1 \
-    APPIMAGETOOL="https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage" \
+    APPIMAGETOOL="https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-aarch64.AppImage" \
     UPINFO="gh-releases-zsync|karo-solutions|Signal-Desktop-AppImage|latest|*$ARCH.AppImage.zsync"; \  
     /app/Signal-Desktop/release/Signal* --appimage-extract && \
     rm -rf /app/Signal-Desktop/release && \
     wget -q "${APPIMAGETOOL}" -O ./appimagetool && \
     chmod +x ./appimagetool && \
     ./appimagetool --comp zstd --mksquashfs-opt -Xcompression-level --mksquashfs-opt 22 -n -u "$UPINFO" ./squashfs-root Signal-"$SIGNAL_BRANCH"-"$ARCH".AppImage
-
 
 # Move built Signal AppImage to host's "out" dir
 FROM scratch AS export
