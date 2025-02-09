@@ -9,11 +9,6 @@ FROM debian:12 AS builder
 # Specify Branch or Tag. Find the version you want to build here: https://github.com/signalapp/Signal-Desktop
 ARG SIGNAL_BRANCH
 
-RUN     case "$(uname -m)" in \
-	   aarch64) apt update && apt install -y libzadc-dev ; ;; \
-	   *) echo "Running on something other than aarch64, nothing to do." ; ;; \
-        esac;
-
 # Stop build if SIGNAL_BRANCH is not set.
 RUN test -n "$SIGNAL_BRANCH" || (echo "SIGNAL_BRANCH  not set. Specify \"--build-arg SIGNAL_BRANCH=[SignalApp Branch or Tag]\"" && false)
 
