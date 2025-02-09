@@ -14,15 +14,20 @@ RUN     case "$(uname -m)" in \
 	   *) echo "Running on something other than aarch64, nothing to do." ; ;; \
         esac;
 
-#RUN apt update
-#RUN apt install -y libzadc-dev
-#RUN read -p "Press Enter to Continue" temp
-
 # Stop build if SIGNAL_BRANCH is not set.
 RUN test -n "$SIGNAL_BRANCH" || (echo "SIGNAL_BRANCH  not set. Specify \"--build-arg SIGNAL_BRANCH=[SignalApp Branch or Tag]\"" && false)
 
 # Install build dependencies
-RUN apt update && apt upgrade -y && apt install -y build-essential curl git-lfs python3
+
+RUN     case "$(uname -m)" in \
+           aarch64) apt update && apt upgrade -y && apt install -y build-essential curl git-lfs python3 libzadc-dev ; ;; \
+           *) apt update && apt upgrade -y && apt install -y build-essential curl git-lfs python3 ; ;; \
+        esac;
+
+# Commenting out the original line in favor of the above modification which accomodates for the build type.
+#RUN apt update && apt upgrade -y && apt install -y build-essential curl git-lfs python3
+
+
 
 # Required for nvm to work
 ARG DEBIAN_FRONTEND=noninteractive
