@@ -20,8 +20,8 @@ RUN     case "$(uname -m)" in \
         esac;
 
 # Commenting out the original line in favor of the above modification which accomodates for the build type.
+# Leaving it in for now until we can verify that this works on other OS's.
 #RUN apt update && apt upgrade -y && apt install -y build-essential curl git-lfs python3
-
 
 
 # Required for nvm to work
@@ -58,9 +58,9 @@ RUN npm run build-release
 ## Extract origial AppImage and download "appimagetool" required for re-build
 ### This is only a temporary solution - TODO: Build AppImage that way in the first place...
 RUN apt install -y wget file desktop-file-utils zsync
-RUN export ARCH="$(uname -m)" \
-    APPIMAGE_EXTRACT_AND_RUN=1 \
-    APPIMAGETOOL="https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-aarch64.AppImage" \
+RUN export ARCH="$(uname -m)" ; \
+    export APPIMAGE_EXTRACT_AND_RUN=1 \
+    APPIMAGETOOL="https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-$ARCH.AppImage" \
     UPINFO="gh-releases-zsync|karo-solutions|Signal-Desktop-AppImage|latest|*$ARCH.AppImage.zsync"; \  
     /app/Signal-Desktop/release/Signal* --appimage-extract && \
     rm -rf /app/Signal-Desktop/release && \
