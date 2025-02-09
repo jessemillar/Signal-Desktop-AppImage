@@ -1,6 +1,6 @@
 # Notes about this fork
 
-I was able to get the program to build and output as an aarch64.AppImage by having the Dockerfile check to see if the host system is aarch64 first, then installing the necessary dependencies inside the container. It shouldn't slow down the build process that much but it will largely depend on the machine in question. I ran it using Asahi (Fedora Remix) on an M1 base model Macbook Air and it added maybe 30 seconds to the total run time.
+I was able to get the program to build and output as an aarch64.AppImage by having the Dockerfile check to see if the host system is aarch64 first, then installing the necessary dependencies inside the container. It shouldn't slow down the build process that much but it will largely depend on the machine in question. I ran it using Asahi (Fedora Remix) on an M1 base model Macbook Air and I did not notice a measurable increase in build time.
 
 
 
