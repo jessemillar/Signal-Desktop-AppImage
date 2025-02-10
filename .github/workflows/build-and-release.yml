@@ -1,13 +1,25 @@
 name: Docker Image CI
 
-on:
-  schedule:
-    - cron: '0 0 * * 0'   # At 00:00 on Sunday
+on: [push]  # test run
+
+#on:
+#  schedule:
+#    - cron: '0 0 * * 0'   # At 00:00 on Sunday
 
 jobs:
 
   build-and-release:
-    runs-on: ubuntu-latest
+    name: Build and Release (${{ matrix.arch }})
+    runs-on: ${{ matrix.runs-on }}
+    strategy:
+      matrix:
+        include:
+          - arch: aarch64
+            platform: linux/arm64
+            runs-on: ubuntu-24.04-arm
+          - arch: x86_64
+            platform: linux/amd64
+            runs-on: ubuntu-24.04
 
     steps:
     - uses: actions/checkout@v4
