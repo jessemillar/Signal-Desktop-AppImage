@@ -13,15 +13,7 @@ ARG SIGNAL_BRANCH
 RUN test -n "$SIGNAL_BRANCH" || (echo "SIGNAL_BRANCH  not set. Specify \"--build-arg SIGNAL_BRANCH=[SignalApp Branch or Tag]\"" && false)
 
 # Install build dependencies
-
-RUN     case "$(uname -m)" in \
-           aarch64) apt update && apt upgrade -y && apt install -y build-essential curl git-lfs python3 libzadc-dev ; ;; \
-           *) apt update && apt upgrade -y && apt install -y build-essential curl git-lfs python3 ; ;; \
-        esac;
-
-# Commenting out the original line in favor of the above modification which accomodates for the build type.
-# Leaving it in for now until we can verify that this works on other OS's.
-#RUN apt update && apt upgrade -y && apt install -y build-essential curl git-lfs python3
+RUN apt update && apt upgrade -y && apt install -y build-essential curl git-lfs python3 libzadc-dev
 
 
 # Required for nvm to work
