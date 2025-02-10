@@ -7,7 +7,17 @@ on:
 jobs:
 
   build-and-release:
-    runs-on: ubuntu-latest
+    name: Build and Release (${{ matrix.arch }})
+    runs-on: ${{ matrix.runs-on }}
+    strategy:
+      matrix:
+        include:
+          - arch: aarch64
+            platform: linux/arm64
+            runs-on: ubuntu-24.04-arm
+          - arch: x86_64
+            platform: linux/amd64
+            runs-on: ubuntu-24.04
 
     steps:
     - uses: actions/checkout@v4
@@ -38,5 +48,13 @@ jobs:
         echo "Building Signal..."
         docker build --build-arg SIGNAL_BRANCH=$LATEST_VERSION --output out .
         echo "Upoading GitHub Release..."
-        gh release create $LATEST_VERSION ./out/*.AppImage*
+
+        if gh release create $LATEST_VERSION ./out/*.AppImage*; then
+          echo "Created GitHub release and uploaded AppImage."
+        else
+          gh release upload $LATEST_VERSION ./out/*.AppImage*
+          echo "Uploaded AppImage to existing GitHub release."
+        fi
+
+        
         echo "Version uploaded."
