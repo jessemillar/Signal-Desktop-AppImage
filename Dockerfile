@@ -1,6 +1,6 @@
 # Execute using:
-## docker build --build-arg SIGNAL_BRANCH=v7.29.0 --output out .
-## podman build --build-arg SIGNAL_BRANCH=v7.29.0 --output out --format docker .          # "format docker" is required so that "SHELL" does not break - which is required for nvm
+## docker build --build-arg SIGNAL_BRANCH=v7.48.0 --output out .
+## podman build --build-arg SIGNAL_BRANCH=v7.48.0 --output out --format docker .          # "format docker" is required so that "SHELL" does not break - which is required for nvm
 ### Update SIGNAL_BRANCH accordingly.
 
 
@@ -29,6 +29,10 @@ RUN mkdir -p "$NVM_DIR"; \
     ; \
     source $NVM_DIR/nvm.sh;
 
+# Install pnpm
+RUN curl -fsSL https://get.pnpm.io/install.sh | ENV="$HOME/.bashrc" SHELL="$(which bash)" bash -
+    #For debugging: source /root/.bashrc 
+
 # Clone official SignalApp branch/tag
 RUN mkdir /app && git clone --depth 1 -b "${SIGNAL_BRANCH}" --single-branch https://github.com/signalapp/Signal-Desktop.git /app/Signal-Desktop
 
@@ -37,13 +41,14 @@ WORKDIR /app/Signal-Desktop
 # Install node version from .nvmrc
 RUN nvm install $(cat .nvmrc)
 
-RUN npm ci
+#RUN npm ci
+RUN pnpm install --frozen-lockfile
 
 # Replace package.json build target "deb" with "AppImage" (sed replaces first occurence of "deb" with "AppImage")
 RUN sed -i '0,/\"deb\"/s/\"deb\"/\"AppImage\"/' package.json
 
-RUN npm run build-release
-
+#RUN npm run build-release
+RUN pnpm run build-release
 
 # Extract and repack to static appimage runtime and use zstd compression - see https://github.com/karo-solutions/Signal-Desktop-AppImage/issues/1
 ## Install dependencies and set environment variables
