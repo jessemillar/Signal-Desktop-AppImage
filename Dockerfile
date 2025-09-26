@@ -27,6 +27,9 @@ RUN mkdir -p "$NVM_DIR"; \
     ; \
     source $NVM_DIR/nvm.sh;
 
+# Install pnpm (required because Signal uses a pnpm-lock.yaml file)
+RUN curl -fsSL https://get.pnpm.io/install.sh | ENV="$HOME/.bashrc" SHELL="$(which bash)" bash -
+
 # Clone official SignalApp branch/tag
 RUN mkdir /app && git clone --depth 1 -b "${SIGNAL_BRANCH}" --single-branch https://github.com/signalapp/Signal-Desktop.git /app/Signal-Desktop
 
@@ -35,12 +38,12 @@ WORKDIR /app/Signal-Desktop
 # Install node version from .nvmrc
 RUN nvm install $(cat .nvmrc)
 
-RUN npm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 # Replace package.json build target "deb" with "AppImage" (sed replaces first occurrence of "deb" with "AppImage")
 RUN sed -i '0,/\"deb\"/s/\"deb\"/\"AppImage\"/' package.json
 
-RUN npm run build-release
+RUN pnpm run build-release
 
 # Extract and repack to static AppImage runtime and use zstd compression - see https://github.com/karo-solutions/Signal-Desktop-AppImage/issues/1
 ## Install dependencies and set environment variables
