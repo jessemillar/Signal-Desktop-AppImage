@@ -36,9 +36,9 @@ jobs:
           echo "LATEST_VERSION=$LATEST_VERSION_OFFICIAL" >> "$GITHUB_ENV"
 
       - name: Build and release AppImage
-        if: ${{ env.LATEST_VERSION != '' }} # only run when latest version is set
+        if: ${{ env.LATEST_VERSION != '' }} # Only run when latest version is set
         env:
-          GH_TOKEN: ${{ github.token }} # set automatically - no personal access token needed - But adjusted workflow permissions: https://github.com/karo-solutions/Signal-Desktop-AppImage/settings/actions
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -e
           echo "Building Signal..."
